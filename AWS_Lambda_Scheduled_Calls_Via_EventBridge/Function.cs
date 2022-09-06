@@ -17,10 +17,11 @@ public class Function
     public async Task<User> FunctionHandler(ILambdaContext context)
     {
         var client = new HttpClient();
-        var envVar = Environment.GetEnvironmentVariable("environment");
         var response = await client.GetAsync("https://jsonplaceholder.typicode.com/todos/1");
         var content = await response.Content.ReadAsStringAsync();
-        return JsonConvert.DeserializeObject<User>(content);
+        var user = JsonConvert.DeserializeObject<User>(content);
+        user.envVar = Environment.GetEnvironmentVariable("environment");
+        return user;
     }
 }
 
@@ -32,4 +33,6 @@ public class User
     public bool Completed { get; set; }
 
     public DateTime CalledAt { get { return DateTime.Now; } }
+
+    public string envVar { get; set; }
 }

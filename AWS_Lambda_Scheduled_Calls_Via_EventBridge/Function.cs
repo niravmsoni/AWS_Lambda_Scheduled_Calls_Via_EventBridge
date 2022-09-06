@@ -17,6 +17,7 @@ public class Function
     public async Task<User> FunctionHandler(ILambdaContext context)
     {
         var client = new HttpClient();
+        var envVar = Environment.GetEnvironmentVariable("environment");
         var response = await client.GetAsync("https://jsonplaceholder.typicode.com/todos/1");
         var content = await response.Content.ReadAsStringAsync();
         return JsonConvert.DeserializeObject<User>(content);
